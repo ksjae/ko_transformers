@@ -7,6 +7,7 @@ from yt_encoder import YTEncoder
 from transformers import GPT2LMHeadModel
 import threading
 import regex as re
+import kobert_transformers
 
 from os import environ
 device = environ.get('DEVICE', 'cuda:0')
@@ -25,7 +26,8 @@ logger = logging.getLogger(__name__)
 
 model_path = 'gpt2/medium'
 
-tokenizer = YTEncoder.from_pretrained(model_path)
+# Yeah, yeah. choose tokenizer.
+tokenizer = get_tokenizer()
 
 model = GPT2LMHeadModel.from_pretrained(model_path)
 model.to(device)

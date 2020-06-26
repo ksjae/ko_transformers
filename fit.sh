@@ -1,22 +1,19 @@
-python tpu_lm_finetuning.py \
-      --seed=$RANDOM \
-      --output_dir=$OUTPUT \
-      --model_type=gpt2 \
-      --model_name_or_path=$MODEL_SIZE \
-      --do_train \
-      --train_data_file=$TRAIN_FILE \
-      --reload_data_file 1 \
-      --per_gpu_train_batch_size $BS \
-      --save_steps=10000 \
-      --logging_steps=100 \
-      --warmup_samples ${WARMUP:-128000} \
-      --learning_rate $LR \
-      --overwrite_output_dir \
-      --tokenizer_class YTEncoder \
-      --tokenizer_name bpe/yt.model \
-      --evaluate_during_training \
-      --eval_data_file=${VALID:-./data/classic/valid} \
-      --per_gpu_eval_batch_size $BS \
-      --save_total_limit 30 \
-      --num_train_epochs $NUM_EPOCH \
-      --unfreeze_level $UNFREEZE
+python3 run_lm_finetuning.py \
+    --output_dir=output \
+    --model_type=gpt2 \
+    --model_name_or_path=gpt2-large \
+    --do_train \
+    --train_data_file=train_harry.txt \
+    --per_gpu_train_batch_size 1 \
+    --save_steps=20000 \
+    --logging_steps=1 \
+    --fp16 \
+    --fp16_opt_level O1 \
+    --warmup_samples 16000 \
+    --learning_rate 5e-5 \
+    --do_eval \
+    --evaluate_during_training \
+    --eval_steps 1000 \
+    --eval_data_file=val_harry.txt \
+    --unfreeze_level 0 \
+    --no_cuda

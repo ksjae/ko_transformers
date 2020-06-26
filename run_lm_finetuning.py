@@ -43,7 +43,7 @@ except:
 from tqdm import tqdm, trange
 from dataclasses import dataclass
 from fastprogress import progress_bar
-from fastai.basics import *
+from fastai.basics import *         #flatten_model() 이용?
 
 from run_generation import sample_sequence
 
@@ -54,8 +54,7 @@ from transformers import (WEIGHTS_NAME, AdamW, get_linear_schedule_with_warmup, 
                                   RobertaConfig, RobertaForMaskedLM, RobertaTokenizer,
                                   DistilBertConfig, DistilBertForMaskedLM, DistilBertTokenizer)
 
-from sp_encoder import SPEncoder
-from yt_encoder import YTEncoder
+from kobert_transformers import get_tokenizer
 
 logger = logging.getLogger(__name__)
 
@@ -587,8 +586,10 @@ def main():
     
     config_class, model_class, tokenizer_class = MODEL_CLASSES[args.model_type]
     config = config_class.from_pretrained(args.config_name if args.config_name else args.model_name_or_path)
-    if args.tokenizer_class: tokenizer_class = globals()[args.tokenizer_class]
-    tokenizer = tokenizer_class.from_pretrained(args.tokenizer_name if args.tokenizer_name else args.model_name_or_path, do_lower_case=args.do_lower_case)
+    #if args.tokenizer_class: tokenizer_class = globals()[args.tokenizer_class]
+    #tokenizer = tokenizer_class.from_pretrained(args.tokenizer_name if args.tokenizer_name else args.model_name_or_path, do_lower_case=args.do_lower_case)
+    # Okay, okay, I know, will be selectable from commandline in some future
+    tokenizer = get_tokenizer()
     if args.block_size <= 0:
         args.block_size = tokenizer.max_len_single_sentence  # Our input block size will be the max possible for the model
     args.block_size = min(args.block_size, tokenizer.max_len_single_sentence)

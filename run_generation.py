@@ -25,6 +25,7 @@ from tqdm import trange
 import torch
 import torch.nn.functional as F
 import numpy as np
+from kobert_transformers import get_tokenizer
 
 from transformers import (GPT2Config, OpenAIGPTConfig, XLNetConfig, TransfoXLConfig, 
                                     GPT2LMHeadModel, GPT2Tokenizer, 
@@ -40,7 +41,7 @@ logger = logging.getLogger(__name__)
 
 MAX_LENGTH = int(10000)  # Hardcoded max length to avoid infinite loop
 
-ALL_MODELS = sum((tuple(conf.pretrained_config_archive_map.keys()) for conf in (GPT2Config, OpenAIGPTConfig, XLNetConfig, TransfoXLConfig)), ())
+#ALL_MODELS = sum((tuple(conf.pretrained_config_archive_map.keys()) for conf in (GPT2Config, OpenAIGPTConfig, XLNetConfig, TransfoXLConfig)), ())
 
 MODEL_CLASSES = {
     'gpt2': (GPT2LMHeadModel, GPT2Tokenizer),
@@ -143,7 +144,7 @@ def main():
     parser.add_argument("--model_type", default=None, type=str, required=True,
                         help="Model type selected in the list: " + ", ".join(MODEL_CLASSES.keys()))
     parser.add_argument("--model_name_or_path", default=None, type=str, required=True,
-                        help="Path to pre-trained model or shortcut name selected in the list: " + ", ".join(ALL_MODELS))
+                        help="Path to pre-trained model or shortcut name")
     parser.add_argument("--prompt", type=str, default="")
     parser.add_argument("--padding_text", type=str, default="")
     parser.add_argument("--length", type=int, default=20)
@@ -163,7 +164,9 @@ def main():
 
     args.model_type = args.model_type.lower()
     model_class, tokenizer_class = MODEL_CLASSES[args.model_type]
-    tokenizer = tokenizer_class.from_pretrained(args.model_name_or_path)
+    # This, too, should be args-based
+    #tokenizer = tokenizer_class.from_pretrained(args.model_name_or_path)
+    tokenizer = get_tokenizer()
     model = model_class.from_pretrained(args.model_name_or_path)
     model.to(args.device)
     model.eval()

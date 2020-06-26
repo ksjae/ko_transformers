@@ -1,10 +1,8 @@
-# Russian GPT-2 
+# Korean GPT-2 
 
 # 1. I just want to play with your models
 
-You can try writing with the model here https://porfirevich.ru and with Telegram chat bot ```@PorfBot```
-
-You can try poetry with Telegram chat bot ```@NeuroPoetBot```
+WIP
 
 # 2. What are results?
 
@@ -12,65 +10,23 @@ Your perplexity will be different, depending on the tokenizer, the vocab and the
 
 Values in the table are perplexity on the validation set.
 
-Huge dataset
+from OSCAR WebCrawl dataset
 
-GPT-2                           | Small, 124M. BS 64 | Medium, 355M. BS 32   | 
----                                  | -- | ---                          | 
-Unfreeze 0, LR 24e-4         | 80 epoch, 85-90 | 80 epoch,  81-85                         |   
-Unfreeze 0, LR 3e-4          | 80 epoch, 75-76 | 100 epoch,  64-65                         |   
-Unfreeze 0, LR 6e-5          | 80 epoch, 73-73.5 | 40 epoch,  63-63.5                         |   
-Unfreeze 1, LR 3e-4          | 118 epoch, 51-52 | 142 epoch, 42.3-43.7                    |   
-Unfreeze 1, LR 6e-5         | 80 epoch, 49-49.5 | 40 epoch, 41.-41.6                     |   
-Unfreeze 2, LR 3e-4          | 70 epoch, 45.5 |  68 epoch, 37.2-38.6                        |   
-Unfreeze 2, LR 6e-5         | 200 epoch, 41.18-42.19 | 87 epoch, 35.4-35.9                          |   
-Unfreeze 7, LR 3e-4          | 90 epoch, 35.3 - 35.9 | 163 epoch, 28.6-29.6                          |   
-Unfreeze 7, LR 6e-5         | 88 epoch, 32.6-33. | 90 epoch, 27.2-27.5                          |   
-Unfreeze -1 (all), LR 6e-5         | 160 epoch, 30.5-30.9 | 163 epoch, 23.8-24.15                          |   
+WIP 
 
-Classics dataset. 
-It's only 500Mb and GPT-2 overfits it pretty fast. 
 
-GPT-2                           | Small, 124M  | Medium, 355M   | 
----                                  | -- | ---                          | 
-Unfreeze -1 (all)         | 28 epoch, 26.22 | 7 epoch, **20.9722**                          |     
+Self-made dataset, consisting of various Korean novels
 
-Poetry dataset
-
-GPT-2                           | Small, 124M  | Medium, 355M   | 
----                                  | -- | ---                          | 
-Unfreeze -1 (all)         | 25 epoch, 26.22 | 7 epoch, 48.36                         |     
-
-Pelevin dataset
-
-GPT-2                           | Small, 124M  | Medium, 355M   | 
----                                  | -- | ---                          | 
-Unfreeze -1 (all)         | 5 epoch, 44.55 | 3 epoch, 33.38                          |    
+WIP
 
 
 I've trained the model using gradual unfreezing with '--unfreeze_level' parameter. The sequence was 0,1,2,7,-1 (as in the table with results). When loss don't improve for a day I switch to next value (like from 2 to 7). You can find my exact scripts in `tpu/schedule_small.txt` and `tpu/schedule_medium.txt`.
 
 # 3. I'd like to download your models
 
-The model that isn't fine-tuned on any author is here
+WIP
 
-```bash
-pip install awscli
-aws s3 sync --no-sign-request s3://models.dobro.ai/gpt2/ru/unfreeze_all gpt2
-```
-
-Folders with ```s_``` prefix contain Small (124M) model, ```m_``` - for Medium (355M) model. 
-
-To understand how to generate text you should start by looking at `rest.py`. 
-
-Also, you can download all fine-tuned models. 
-
-```bash
-aws s3 sync --no-sign-request s3://models.dobro.ai/gpt2/ru all
-```
-
-The one with which you can play on the site is located in the `Pelevin` folder.
-
-# 4. I've got a small Russian dataset and I want to finetune your model on it
+# 4. I've got a small dataset and I want to finetune your model on it
 
 Download the models (intructions above), choose the model and put it in your output folder. Use validation set and be careful with overfitting. On small dataset it will overfit very fast - 3-7 epoch. Follow instructions below, except you don't need to train you tokenization dictionary, because you already have one.
 
